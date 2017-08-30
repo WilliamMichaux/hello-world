@@ -7,7 +7,7 @@
 
 """Ce programme servira donc a renommmer les chansons d'un dossier. On pourra choisir le nombre de 'groupes' qu'il faut faire,
     par exemple si on veut séparer de la musique électro de musiques des années 80 on peut choisir différents groupes pour que
-    les années 80 arrivent après.
+    les années 80 arrivent après. coucou
 """
 
 import os
