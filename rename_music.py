@@ -41,19 +41,35 @@ def rename_music(path):
     here=os.getcwd()
     songs=getSong(path)
 
-    nbr_group = input('Combien de groupes ? ')
-
-    pre_class_songs={}
-    for i in range(nbr_group):
-        pre_class_songs['group_' + str(i+1)]=[]
-
     for song in songs:
         group = input('Dans quel groupe mettre %s ? '%(song))
         pre_class_songs['group_' + str(group)].append(song)
 
-    compteur=1
+def creating_group():
+    """
+    Just creating the groups to class the songs
+    :return:nbr_group : the number of groups (int)
+    :return:pre_class_songs: empty dict for the songs
+    """
+
+    nbr_group = input('Combien de groupes ? ')
+    pre_class_songs = {}
     for i in range(nbr_group):
-        for song in pre_class_songs['group_' + str(i+1)]:
+        name = raw_input("Quel est le nom du %de groupe" % i)
+        pre_class_songs['group_' + str(i + 1)] = []
+        pre_class_songs[i] = name
+
+
+def rename(pre_class_songs, nbr_group):
+    """
+    This function will class and rename the songs
+    :param pre_class_songs: Dict with all the songs pre classed by groups.
+    :return: /
+    """
+
+    compteur = 1
+    for i in range(nbr_group):
+        for song in pre_class_songs['group_' + str(i + 1)]:
             if compteur < 10:
                 os.rename(song, '00' + str(compteur) + '-' + song)
             elif compteur >= 10 and compteur < 100:
@@ -62,8 +78,6 @@ def rename_music(path):
                 os.rename(song, str(compteur) + '-' + song)
 
             compteur += 1
-
-
 
 def reset(path):
     """
