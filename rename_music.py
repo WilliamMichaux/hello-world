@@ -28,6 +28,13 @@ def getSong(path):
     songs = os.listdir(path)
     return songs
 
+def classSong(songs, pre_class_songs):
+    """
+    This function will class the songs in the differents pre-group
+    :param songs:
+    :param pre_class_songs:
+    :return:
+    """
 
 def rename_music(path):
     """
@@ -92,4 +99,4 @@ def reset(path):
         os.rename(music, music[4:])
     
 
-rename_music('/home/william/Bureau/musique_cle/')
+reset('/home/william/Bureau/musique_cle/')
