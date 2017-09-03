@@ -54,7 +54,14 @@ def rename_music(path):
 
     pre_class_songs, nbr_group = creating_group()
     classSong(songs, pre_class_songs)
-    print pre_class_songs
+    for groups in range(nbr_group):
+        sorte = input('Dans quel mode voulez vous classer le groupe %d "%s"?\n\n\t1 : Automatique (vous n\'avez rien à faire)\n\t2 : Aléatoire (Pareil, rien à faire sauf que les chansons sont mises dans un ordre aléatoire)\n\t3 : Manuel (À vous de jouer)\n\nMode : ' %(groups+1, pre_class_songs[groups+1]))
+        if sorte == 1:
+            rename_auto(pre_class_songs,  nbr_group)
+        elif sorte ==2:
+            break
+        elif sorte ==3:
+            break
 
 def creating_group():
     """
@@ -73,14 +80,16 @@ def creating_group():
     return pre_class_songs, nbr_group
 
 
-def rename(pre_class_songs, nbr_group):
+def rename_auto(pre_class_songs, nbr_group, last_count=1):
     """
-    This function will class and rename the songs
+    This function will class and rename the songs automaticaly, just taking the latest number and rename the songs with i+1 (sort by groups)
     :param pre_class_songs: Dict with all the songs pre classed by groups.
+    :param nbr_group: number of groups to class (int)
+    :param last_count: This is the last number we use to class the songs
     :return: /
     """
 
-    compteur = 1
+    compteur = last_count
     for i in range(nbr_group):
         for song in pre_class_songs['group_' + str(i + 1)]:
             if compteur < 10:
@@ -91,6 +100,7 @@ def rename(pre_class_songs, nbr_group):
                 os.rename(song, str(compteur) + '-' + song)
 
             compteur += 1
+    return last_count
 
 def reset(path):
     """
