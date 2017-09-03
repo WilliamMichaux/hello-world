@@ -31,10 +31,14 @@ def getSong(path):
 def classSong(songs, pre_class_songs):
     """
     This function will class the songs in the differents pre-group
-    :param songs:
-    :param pre_class_songs:
-    :return:
+    :param songs: list/tuple with all songs
+    :param pre_class_songs: dict with all songs sort by groups
+    :return: pre_class_songs: dict with all songs sort by groups
     """
+
+    for song in songs:
+        group = input('Dans quel groupe mettre %s ? '%(song))
+        pre_class_songs['group_' + str(group)].append(song)
 
 def rename_music(path):
     """
@@ -48,9 +52,9 @@ def rename_music(path):
     here=os.getcwd()
     songs=getSong(path)
 
-    for song in songs:
-        group = input('Dans quel groupe mettre %s ? '%(song))
-        pre_class_songs['group_' + str(group)].append(song)
+    pre_class_songs, nbr_group = creating_group()
+    classSong(songs, pre_class_songs)
+    print pre_class_songs
 
 def creating_group():
     """
@@ -62,9 +66,11 @@ def creating_group():
     nbr_group = input('Combien de groupes ? ')
     pre_class_songs = {}
     for i in range(nbr_group):
-        name = raw_input("Quel est le nom du %de groupe" % i)
+        name = raw_input("Quel est le nom du %de groupe? " % (i+1))
         pre_class_songs['group_' + str(i + 1)] = []
-        pre_class_songs[i] = name
+        pre_class_songs[i+1] = name
+
+    return pre_class_songs, nbr_group
 
 
 def rename(pre_class_songs, nbr_group):
@@ -99,4 +105,4 @@ def reset(path):
         os.rename(music, music[4:])
     
 
-reset('/home/william/Bureau/musique_cle/')
+rename_music('/home/william/Bureau/musique_cle2/')
