@@ -11,6 +11,7 @@
 """
 
 import os
+import random
 
 def getSong(path):
     """Get the songs in a folder and a list of it
@@ -52,14 +53,15 @@ def rename_music(path):
     here=os.getcwd()
     songs=getSong(path)
 
+    last_count=1
     pre_class_songs, nbr_group = creating_group()
     classSong(songs, pre_class_songs)
     for groups in range(nbr_group):
-        sorte = input('Dans quel mode voulez vous classer le groupe %d "%s"?\n\n\t1 : Automatique (vous n\'avez rien à faire)\n\t2 : Aléatoire (Pareil, rien à faire sauf que les chansons sont mises dans un ordre aléatoire)\n\t3 : Manuel (À vous de jouer)\n\nMode : ' %(groups+1, pre_class_songs[groups+1]))
+        sorte = input('\nDans quel mode voulez vous classer le groupe %d "%s"?\n\n\t1 : Automatique (vous n\'avez rien à faire)\n\t2 : Aléatoire (Pareil, rien à faire sauf que les chansons sont mises dans un ordre aléatoire)\n\t3 : Manuel (À vous de jouer)\n\nMode : ' %(groups+1, pre_class_songs[groups+1]))
         if sorte == 1:
-            rename_auto(pre_class_songs,  nbr_group)
+            pre_class_songs, last_count = rename_auto(pre_class_songs,  groups,last_count)
         elif sorte ==2:
-            break
+            pre_class_songs, last_count = rename_random(pre_class_songs,groups,last_count)
         elif sorte ==3:
             break
 
@@ -79,28 +81,53 @@ def creating_group():
 
     return pre_class_songs, nbr_group
 
+def rename_random(pre_class_songs, num_group, last_count=1):
+    """
+    This function will rename the songs of a group with random number
+    :param pre_class_songs: Dict with all songs pre classed by groups (dict)
+    :param num_group: number of the group we have to class (int)
+    :param last_count: This is the last number we use to class the songs (int)
+    :return: pre_class_songs: idem && compteur : the count of songs
+    """
 
-def rename_auto(pre_class_songs, nbr_group, last_count=1):
+    compteur= last_count
+    thisGroup = pre_class_songs['group_' + str(num_group + 1)]
+
+    while len(thisGroup) != 0:
+        randomInt = random.randint(0, len(thisGroup)-1)
+
+        if compteur <10:
+            os.rename(thisGroup[randomInt], '00' + str(compteur) +'-'+ thisGroup[randomInt])
+        elif compteur >10 and compteur < 100:
+            os.rename(thisGroup[randomInt], '0' + str(compteur) + '-' + thisGroup[randomInt])
+        else:
+            os.rename(thisGroup[randomInt], str(compteur) + '-' + thisGroup[randomInt])
+
+        thisGroup.remove(thisGroup[randomInt])
+        compteur+=1
+
+    return pre_class_songs, compteur
+
+def rename_auto(pre_class_songs, num_group, last_count=1):
     """
     This function will class and rename the songs automaticaly, just taking the latest number and rename the songs with i+1 (sort by groups)
     :param pre_class_songs: Dict with all the songs pre classed by groups.
-    :param nbr_group: number of groups to class (int)
+    :param nbr_group: number of the group we have to class (int)
     :param last_count: This is the last number we use to class the songs
-    :return: /
+    :return: compteur: count of songs && pre_class_songs : idem
     """
 
     compteur = last_count
-    for i in range(nbr_group):
-        for song in pre_class_songs['group_' + str(i + 1)]:
-            if compteur < 10:
-                os.rename(song, '00' + str(compteur) + '-' + song)
-            elif compteur >= 10 and compteur < 100:
-                os.rename(song, '0' + str(compteur) + '-' + song)
-            else:
-                os.rename(song, str(compteur) + '-' + song)
+    for song in pre_class_songs['group_' + str(num_group + 1)]:
+        if compteur < 10:
+            os.rename(song, '00' + str(compteur) + '-' + song)
+        elif compteur >= 10 and compteur < 100:
+            os.rename(song, '0' + str(compteur) + '-' + song)
+        else:
+            os.rename(song, str(compteur) + '-' + song)
 
-            compteur += 1
-    return last_count
+        compteur += 1
+    return pre_class_songs, compteur
 
 def reset(path):
     """
