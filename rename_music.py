@@ -53,17 +53,28 @@ def rename_music(path):
     here=os.getcwd()
     songs=getSong(path)
 
-    last_count=1
-    pre_class_songs, nbr_group = creating_group()
-    classSong(songs, pre_class_songs)
-    for groups in range(nbr_group):
-        sorte = input('\nDans quel mode voulez vous classer le groupe %d "%s"?\n\n\t1 : Automatique (vous n\'avez rien à faire)\n\t2 : Aléatoire (Pareil, rien à faire sauf que les chansons sont mises dans un ordre aléatoire)\n\t3 : Manuel (À vous de jouer)\n\nMode : ' %(groups+1, pre_class_songs[groups+1]))
-        if sorte == 1:
-            pre_class_songs, last_count = rename_auto(pre_class_songs,  groups,last_count)
-        elif sorte ==2:
-            pre_class_songs, last_count = rename_random(pre_class_songs,groups,last_count)
-        elif sorte ==3:
-            break
+    choice = input("Que voulez vous faire ? :\n1. Classer les chansons\n2. Remettre à 0\n\nChoix : ")
+
+    if choice == 1:
+        last_count = 1
+        pre_class_songs, nbr_group = creating_group()
+        classSong(songs, pre_class_songs)
+
+        for groups in range(nbr_group):
+            sorte = input(
+                '\nDans quel mode voulez vous classer le groupe %d "%s"?\n\n\t1 : Automatique (vous n\'avez rien à faire)\n\t2 : Aléatoire (Pareil, rien à faire sauf que les chansons sont mises dans un ordre aléatoire)\n\t3 : Manuel (À vous de jouer)\n\nMode : ' % (
+                groups + 1, pre_class_songs[groups + 1]))
+            if sorte == 1:
+                pre_class_songs, last_count = rename_auto(pre_class_songs, groups, last_count)
+            elif sorte == 2:
+                pre_class_songs, last_count = rename_random(pre_class_songs, groups, last_count)
+            elif sorte == 3:
+                pre_class_songs, last_count = rename_manual(pre_class_songs, groups, last_count)
+
+    else:
+        reset(path)
+
+
 
 def creating_group():
     """
@@ -80,6 +91,48 @@ def creating_group():
         pre_class_songs[i+1] = name
 
     return pre_class_songs, nbr_group
+
+def rename_manual(pre_class_songs, num_group, last_count):
+    """
+    This function will rename the songs of a group manually, so the user can class as he want to
+    :param pre_class_songs: pre_class_songs: Dict with all songs pre classed by groups (dict)
+    :param num_group: number of the group we have to class (int)
+    :param last_count: This is the last number we use to class the songs (int)
+    :return: pre_class_songs: idem && compteur : the count of songs
+    """
+    compteur = last_count
+    thisGroup = pre_class_songs['group_' +str(num_group+1)]
+    maxRange = len(thisGroup)
+
+    print "Voici les musiques à classer :\n------------------------------"
+    for songs in thisGroup:
+        print songs
+
+    index_song = 0
+    ok_index = []
+    for i in range(compteur, compteur + maxRange):
+        ok_index.append(i)
+
+    while len(ok_index) != 0:
+        condition = False
+        while condition == False:
+            print "\nLes index disponible sont :  "
+            print ok_index
+            place = input("En quelle position mettre : %s ? --> " % thisGroup[index_song])
+            if place in ok_index:
+                ok_index.remove(place)
+                condition = True
+            else:
+                print "Veuillez choisir un index valide."
+        if place < 10:
+            os.rename(thisGroup[index_song], '00' + str(place) + '-' + thisGroup[index_song])
+        elif place >= 10 and place <100:
+            os.rename(thisGroup[index_song], '0' + str(place) + '-' + thisGroup[index_song])
+        else:
+            os.rename(thisGroup[index_song],str(place) + '-' + thisGroup[index_song])
+        index_song+=1
+
+    return pre_class_songs, compteur+maxRange
 
 def rename_random(pre_class_songs, num_group, last_count=1):
     """
@@ -98,7 +151,7 @@ def rename_random(pre_class_songs, num_group, last_count=1):
 
         if compteur <10:
             os.rename(thisGroup[randomInt], '00' + str(compteur) +'-'+ thisGroup[randomInt])
-        elif compteur >10 and compteur < 100:
+        elif compteur >=10 and compteur < 100:
             os.rename(thisGroup[randomInt], '0' + str(compteur) + '-' + thisGroup[randomInt])
         else:
             os.rename(thisGroup[randomInt], str(compteur) + '-' + thisGroup[randomInt])
