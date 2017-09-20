@@ -195,4 +195,4 @@ def reset(path):
         os.rename(music, music[4:])
     
 
-rename_music('/home/william/Bureau/musique_cle2/')
+rename_music('/home/william/Bureau/musique_cle/')
