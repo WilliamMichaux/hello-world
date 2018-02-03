@@ -74,8 +74,6 @@ def rename_music(path):
     else:
         reset(path)
 
-
-
 def creating_group():
     """
     Just creating the groups to class the songs
