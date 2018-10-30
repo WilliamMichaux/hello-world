@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>PIF PAF BET</title> 
+        <script type="text/javascript">
+            //Date compteur
+            let dayCD = new Date("Oct 31, 2018 23:23:23").getTime();
+            //Actualisation 1 sec
+            let inter = setInterval(function() {
+                //Date du moment
+                let now = new Date().getTime();
+
+                //Distance entre les deux dates
+                let distance = dayCD - now;
+
+                //Variable à ajouter dans le <p>
+                let days = Math.floor(distance / (1000*60*60*24));
+                let hours = Math.floor(distance % (1000*60*60*24)/(1000*60*60));
+                let minutes = Math.floor(distance % (1000*60*60) / (1000*60));
+                let seconds = Math.floor(distance % (1000*60) / 1000);
+
+                //Affiche le temps
+                document.getElementById("countdown").innerHTML = `${days} j ${hours} h ${minutes} min ${seconds} s.`;
+
+                if (distance < 0) {
+                    clearInterval(inter);
+                    document.getElementById("countdown").innerHTML = `PIF PAF DODO`
+                }
+            }, 1000);           
+        </script>
+        <style type="text/css">
+            h1 {
+                text-align: center;
+            }
+            p {
+                text-align: center;
+                font-family: 'arial';
+                position: relative;
+                top: 250px;
+                font-size: 6em;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>PIF PAF POUR DODO</h1>
+        <p id="countdown"></p>        
+    </body>
+</html>
